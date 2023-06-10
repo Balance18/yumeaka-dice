@@ -1,0 +1,113 @@
+<html>
+    <body>
+        <div id="画面"></div>
+        <!--HTML ここから-->
+        <button onclick="ボタンがクリックされた()">サイコロを振る</button>
+        
+        <!--HTML ここまで-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/92/three.min.js"></script> 
+        <script>
+            //javascript ここから
+
+const 円周率 = Math.PI
+let 回転中 = true
+let 投げ上げ中=false
+let 速度
+const シーン = new THREE.Scene()
+const カメラ = new THREE.PerspectiveCamera( 65, 4/3, 1, 1000 );
+カメラ.position.z = 600;
+const ライト = new THREE.DirectionalLight( 0xffffff, 3 ); //平行光源（色、強度）
+ライト.position.set(0,0,3);
+シーン.add( ライト );
+const レンダラー = new THREE.WebGLRenderer();
+レンダラー.setSize( 640, 480 );
+レンダラー.setClearColor(new THREE.Color('black'));//背景色の設定
+画面.appendChild( レンダラー.domElement );
+const モデル = new THREE.CubeGeometry(200,200,200);
+const テクスチャ = new THREE.TextureLoader();
+const マテリアル = [
+    new THREE.MeshBasicMaterial({map: テクスチャ.load( 'img/1.png' )}),
+    new THREE.MeshBasicMaterial({map: テクスチャ.load( 'img/2.png' )}),
+    new THREE.MeshBasicMaterial({map: テクスチャ.load( 'img/3.png' )}),
+    new THREE.MeshBasicMaterial({map: テクスチャ.load( 'img/4.png' )}),
+    new THREE.MeshBasicMaterial({map: テクスチャ.load( 'img/5.png' )}),
+    new THREE.MeshBasicMaterial({map: テクスチャ.load( 'img/6.png' )})
+];
+const オブジェクト = new THREE.Mesh( モデル, マテリアル );
+シーン.add( オブジェクト );
+function ボタンがクリックされた(){
+    if (回転中) {
+        投げ上げ中=true
+        速度=35
+        サイコロの目 = Math.floor(Math.random()*6) + 1
+    }else{
+    回転中=true
+    }
+    
+}
+function update() {
+    
+    //Update ここから
+    
+if (投げ上げ中){
+    オブジェクト.position.y+=速度
+    速度 -=1
+    if(速度<=0){
+        回転中=false
+        switch (サイコロの目) {
+            case 1:
+オブジェクト.rotation.x = 0
+オブジェクト.rotation.y = 円周率 / -2
+                break;
+                case 2:
+オブジェクト.rotation.x = 0
+オブジェクト.rotation.y = 円周率 / 2
+                break;
+                case 3:
+オブジェクト.rotation.x =円周率 / 2
+オブジェクト.rotation.y
+                break;
+                case 4:
+オブジェクト.rotation.x=円周率/-2
+オブジェクト.rotation.y=0        
+                break;
+                case 5:
+オブジェクト.rotation.x=0
+オブジェクト.rotation.y=0
+                break;
+                case 6:
+オブジェクト.rotation.x=円周率
+オブジェクト.rotation.y=0
+                break;
+
+
+
+
+        }
+    }
+    if(速度<=-35){
+        投げ上げ中=false
+        オブジェクト.position.y=0
+    }
+}
+
+
+//回転中がtrueなら
+if (回転中) {
+     //回転させる
+オブジェクト.rotation.x += 0.1;
+オブジェクト.rotation.y += 0.1;   //回転させる
+    
+}
+
+    //Update ここまで
+    
+    requestAnimationFrame( update );
+    レンダラー.render( シーン, カメラ );
+};update();
+
+
+            //javascript ここまで
+        </script>
+    </body>
+</html>
